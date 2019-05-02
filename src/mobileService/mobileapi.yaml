@@ -1,0 +1,161 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: MobileApi
+  description: Backend assignment MobileApi spec
+schemes:
+  - http
+  - https
+host: 'localhost:8000'
+basePath: /v1
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /categories:
+    get:
+      summary: Gets article categories
+      description: Returns a list containing all article categories
+      responses:
+        '200':
+          description: A list of Category objects
+          schema:
+            $ref: '#/definitions/ListCategoriesResponse'
+  '/categories/{categoryId}':
+    get:
+      summary: Gets category articles
+      description: Gets all the articles for an category
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: The category's id
+          type: string
+      responses:
+        '200':
+          description: A list of Article overview objects
+          schema:
+            $ref: '#/definitions/ListArticlesResponse'
+        '404':
+          description: Requested category does not exist
+          schema:
+            $ref: '#/definitions/Response'
+  '/articles/{articleId}':
+    get:
+      summary: Get article details
+      description: Gets article details such as the body
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          description: The article's id
+          type: string
+      responses:
+        '200':
+          description: Article details including overview and body
+          schema:
+            $ref: '#/definitions/Article'
+        '404':
+          description: Requested article does not exist
+          schema:
+            $ref: '#/definitions/Response'
+    patch:
+      summary: Updates article's starred property
+      description: Updates article's starred property
+      parameters:
+        - name: articleId
+          in: path
+          required: true
+          description: The article's id
+          type: string
+        - name: SetStarredRequest
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              starred:
+                type: boolean
+      responses:
+        '200':
+          description: Starred property updated OK
+          schema:
+            $ref: '#/definitions/Response'
+        '404':
+          description: Requested category does not exist
+          schema:
+            $ref: '#/definitions/Response'
+definitions:
+  Response:
+    type: object
+    properties:
+      status:
+        type: string
+      message:
+        type: string
+    required:
+      - status
+  Category:
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      imageUrl:
+        type: string
+    required:
+      - id
+      - title
+      - imageUrl
+  ArticleOverview:
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      source:
+        type: string
+      starred:
+        type: boolean
+      timestamp:
+        type: string
+    required:
+      - id
+      - title
+      - source
+      - starred
+      - timestamp
+  Article:
+    type: object
+    properties:
+      overview:
+        $ref: '#/definitions/ArticleOverview'
+      body:
+        type: string
+      imageUrl:
+        type: string
+    required:
+      - overview
+      - body
+      - imageUrl
+  ListArticlesResponse:
+    type: object
+    properties:
+      articles:
+        type: array
+        items:
+          $ref: '#/definitions/ArticleOverview'
+    required:
+      - articles
+  ListCategoriesResponse:
+    type: object
+    properties:
+      categories:
+        type: array
+        items:
+          $ref: '#/definitions/Category'
+    required:
+      - categories
