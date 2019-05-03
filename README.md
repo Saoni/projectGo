@@ -17,10 +17,6 @@ Mastermind/glide is used to manage dependencies.</br>
 Swagger code is generated from the given yaml file using 'swagger generate server -f mobileapi.yaml'. </br>
 
 
-
-go get -u github.com/go-swagger/go-swagger/cmd/swagger 
-
-   
 ## Gets article categories
 
 EndPoint url : http://localhost:8000/v1/categories
